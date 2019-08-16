@@ -1,0 +1,23 @@
+{
+  "name": "simple-gauge",
+  "version": "1.0.0",
+  "description": "A circular gauge for user interfaces.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mywebula/simple-gauge.git"
+  },
+  "author": "MyWebula Ltd",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/mywebula/simple-gauge/issues"
+  },
+  "homepage": "https://github.com/mywebula/simple-gauge#readme",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3",
+    "typescript": "^3.5.3"
+  }
+}
