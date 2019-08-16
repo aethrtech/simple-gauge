@@ -1,0 +1,10 @@
+{
+    "port":8080,
+    "testFiles":"./test/**/*.*",
+    "fixturesFolder":false,
+    "integrationFolder":"./test/integration",
+    "pluginsFile":"./utils/plugins/cypress/index.js",
+    "screenshotsFolder":"./test/screenshots",
+    "videosFolder":"./test/videos"
+    
+}

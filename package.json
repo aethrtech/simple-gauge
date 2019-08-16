@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/mywebula/simple-gauge#readme",
   "devDependencies": {
+    "@types/cypress": "^1.1.3",
+    "eslint": "^6.1.0",
     "parcel-bundler": "^1.12.3",
     "typescript": "^3.5.3"
   }
