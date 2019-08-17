@@ -1,6 +1,6 @@
-import { action } from './action'
+import action  from './action'
 
-export const handleMode = e => {
+export default function handleMode(e){
     e.preventDefault()
     let x = e.touches[0].clientX - e.target.offsetLeft,
         y = e.touches[0].clientY
