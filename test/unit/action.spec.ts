@@ -10,14 +10,14 @@ describe('Action', function(){
     it('Calculates angle (0)', function(){
         const e = {
             offsetX:150,
-            offsetY:0
+            offsetY:25
         }
         equal(action(e, dom, lineWidth),0)
         
     })
     it('Calculates angle (90)', function(){
         const e = {
-            offsetX:140,
+            offsetX:280,
             offsetY: 150
         }
         equal(action(e, dom, lineWidth),90)
@@ -25,22 +25,22 @@ describe('Action', function(){
     it('Calculates angle (180)', function(){
         const e = {
             offsetX:150,
-            offsetY:140
+            offsetY:280
         }
         equal(action(e, dom, lineWidth),180)
     })
     it('Calculates angle (270)', function(){
         const e = {
-            offsetX:10,
-            offsetY:0
+            offsetX:30,
+            offsetY:150
         }
         equal(action(e, dom, lineWidth),270)
     })
-    it('Calculates angle (360)', function(){
+    it('Calculates angle (359)', function(){
         const e = {
-            offsetX:150,
-            offsetY:0
+            offsetX:149,
+            offsetY:25
         }
-        equal(action(e, dom, lineWidth),355)
+        equal(action(e, dom, lineWidth),359)
     })
 })

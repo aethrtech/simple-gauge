@@ -3,8 +3,8 @@ export default function action(e, dom, lineWidth){
 	if (r > dom.offsetWidth/2 - lineWidth + lineWidth/2 || r < dom.offsetWidth/2 - lineWidth - lineWidth/2) return
 	let quadrant = e.offsetY > 150 ? 180 : 0
 	if (e.offsetX < 150 && quadrant === 0) quadrant = 360
-
-	return Math.atan((e.offsetX - dom.offsetWidth/2) / (e.offsetY - dom.offsetWidth/2)) * 180 / Math.PI
+	let angle = Math.ceil(Math.atan((e.offsetX - dom.offsetWidth/2) / (e.offsetY - dom.offsetWidth/2)) * 180 / Math.PI)
+	return Math.abs(quadrant - Math.abs(Math.ceil(angle)))
 
 	
 
