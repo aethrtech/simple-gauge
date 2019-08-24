@@ -1,3 +1,3 @@
-export default function onMouseMove(ev,cb){
-
+export default function onMouseMove(ev?:any):void{
+    return this.state.isSetting
 }
