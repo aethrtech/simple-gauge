@@ -1,4 +1,4 @@
-function renderFrame(degrees,cb){
+export default function renderFrame(degrees,W,ctx,bgcolor,color,text,text_width,H,cb){
     //Clear the canvas everytime a chart is drawn
     ctx.clearRect(0, 0, W, H);
 

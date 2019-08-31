@@ -3,7 +3,8 @@ export default {
     value:{
         isSetting:false,
         isDrawn:false,
-        degreesCurrent:0
+        degreesCurrent:0,
+        animationLoop:null
     
     }
 

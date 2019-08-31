@@ -1,6 +1,14 @@
-const preprocess = require('./preprocess'),
-options = require('./config.json')
+const browserify = require('@cypress/browserify-preprocessor')
 
-module.exports = function PreProcess(on, config){
-    on('file:preprocessor', async file => preprocess(file,options))
+module.exports = (on) => {
+  const options = {
+    browserifyOptions: {
+      extensions: ['.js', '.ts'],
+      plugin: [
+        ['tsify'],
+      ],
+    }
+  }
+
+  on('file:preprocessor', browserify(options))
 }

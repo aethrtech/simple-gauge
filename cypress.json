@@ -1,10 +1,14 @@
 {
     "port":8080,
-    "testFiles":"./test/**/*.*",
+    "testFiles":"*.*",
     "fixturesFolder":false,
     "integrationFolder":"./test/integration",
     "pluginsFile":"./utils/plugins/cypress/index.js",
     "screenshotsFolder":"./test/screenshots",
-    "videosFolder":"./test/videos"
+    "videosFolder":"./test/videos",
+    "supportFile":false,
+    "ignoreTestFiles":[
+        "./src/worker/*.*"
+    ]
     
 }
