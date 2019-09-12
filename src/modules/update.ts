@@ -1,3 +1,6 @@
-export default function update(canvas:HTMLCanvasElement, degree:number, cb:Function){
-    
+export default function update(container:HTMLElement, degrees = 0, worker:any,cb:Function):void{
+
+    worker.postMessage({type:'update', degrees})
+    cb()
+
 }

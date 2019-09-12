@@ -2,8 +2,9 @@ import onmousedown from './on-mouse-down'
 import onmouseup from './on-mouse-up'
 import onmousemove from './on-mouse-move'
 import handleMove from './handle-move'
-
 import draw from './draw'
+import update from './update'
+
 import defaults from './defaults'
 
 import '../types/container'
@@ -27,9 +28,7 @@ export default function Init(container:Container, options?:any, cb?:Function):vo
         container.onmousemove = onmousemove
         container.onmouseup = onmouseup
         container.addEventListener('touchmove',handleMove,false)
-        container.draw = draw
         container.defineProperty(this, 'state', defaults)
-        worker.terminate()
-        cb()
+        cb(null,worker)
     }
 }
