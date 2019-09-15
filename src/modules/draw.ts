@@ -1,5 +1,10 @@
 //@ts-ignore
 import { onmessage } from '../worker/worker'
+import onmousedown from './on-mouse-down'
+import onmouseup from './on-mouse-up'
+import onmousemove from './on-mouse-move'
+import handlemove from './handle-move'
+import action from './action'
 
 export default function draw(container:HTMLElement, degrees = 0, cb:Function):void{
 
@@ -11,6 +16,13 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 	worker = new Worker(URL.createObjectURL(blob))
 
 	let canvas = document.createElement('canvas')
+
+	canvas.onmousedown = onmousedown
+	canvas.onmouseup = onmouseup
+	canvas.onmousemove = onmousemove
+	canvas.ontouchmove = handlemove
+
+
 	
 	container.append(canvas)
 	let offscreen
