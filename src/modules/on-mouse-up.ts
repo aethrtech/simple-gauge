@@ -1,5 +1,5 @@
-export default function onMouseUp(ev?:any):void{
-    Object.defineProperty(this,
+export default function onMouseUp(ev:any,state:any, cb:Function):void{
+    cb(Object.defineProperty(this,
         'state',
         {
             value:{
@@ -7,5 +7,5 @@ export default function onMouseUp(ev?:any):void{
                 isSetting:false
             },
             writable:true
-        })
+        }))
 }

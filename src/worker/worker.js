@@ -1,7 +1,8 @@
 // if ('undefined' === typeof window) importScripts('./create.js')
-let currentCanvas
+let currentCanvas, ctx
 
 export const onmessage = function(ev){
+    console.log(ev)
     switch(ev.data.type){
         case 'create': return create(ev.data,function(){
             //@ts-ignore
@@ -30,7 +31,7 @@ export const onmessage = function(ev){
         if (canvas) currentCanvas = canvas
     
         // const canvas = new OffscreenCanvas(canvas.width,canvas.height),
-        let ctx = canvas.getContext('2d')
+        ctx = canvas.getContext('2d')
         //Clear the canvas everytime a chart is drawn
         ctx.clearRect(0, 0, canvas.width, canvas.height)
     

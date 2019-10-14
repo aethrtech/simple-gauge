@@ -1,10 +1,6 @@
 //@ts-ignore
 import { onmessage } from '../worker/worker'
-import onmousedown from './on-mouse-down'
-import onmouseup from './on-mouse-up'
-import onmousemove from './on-mouse-move'
-import handlemove from './handle-move'
-import action from './action'
+import events from './events'
 
 export default function draw(container:HTMLElement, degrees = 0, cb:Function):void{
 
@@ -17,13 +13,9 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 
 	let canvas = document.createElement('canvas')
 
-	canvas.onmousedown = onmousedown
-	canvas.onmouseup = onmouseup
-	canvas.onmousemove = onmousemove
-	canvas.ontouchmove = handlemove
+	canvas.width = container.offsetWidth
+	canvas.height = container.offsetHeight
 
-
-	
 	container.append(canvas)
 	let offscreen
 	try {
@@ -32,13 +24,22 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 
 	}
 
-	canvas.setAttribute('width','300px')
-	canvas.setAttribute('height','300px')
+	
 
 	worker.postMessage({canvas:offscreen,degrees,type:'create'}, [offscreen])
 
 	worker.onmessage = (ev:any) => {
+		switch(ev.data.type){
+			case 'create': 
+				for (let event of events){
+					canvas[event.name] = ({ touches, target, offsetX, offsetY }) => worker.postMessage({event:event.name,data:{ touches, target:{offsetLeft: target.offsetLeft }, offsetX, offsetY}})
+					
+				
+			}
+			case 'update': return function updated(){
 
+			}
+		}
 		// worker.terminate()
 		//@ts-ignore
 		container.postMessage = worker.postMessage
