@@ -4,7 +4,7 @@
   "description": "A circular gauge for user interfaces.",
   "main": "index.js",
   "scripts": {
-    "test": "npx cypress open",
+    "test":"node ./scripts/spawn-server",
     "build":"node ./scripts/build"
   },
   "repository": {
