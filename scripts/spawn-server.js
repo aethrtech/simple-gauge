@@ -9,6 +9,10 @@ const programs = [{
     name:'CYPRESS',
     cmd:'npx',
     args: ['cypress','open']
+},{
+    name: 'SERVER',
+    cmd: 'node',
+    args:['./test/e2e/server']
 }]
 
 for (let program of programs){
