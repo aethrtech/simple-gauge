@@ -3,7 +3,7 @@ module.exports = function(callback){
     const Bundler = require('parcel-bundler'),
     { resolve } = require('path'),
     options = {
-        outDir:resolve(__dirname,'..','e2e'),
+        outDir:resolve(__dirname,'..','e2e','scripts'),
         outFile:'index.js',
         global:'SimpleGauge',
         target:'browser',
