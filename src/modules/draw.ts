@@ -5,9 +5,9 @@ import events from './events'
 export default function draw(container:HTMLElement, degrees = 0, cb:Function):void{
 
 	let blob, worker:any
-
+	console.log('var ctx \n' + onmessage)
 	//@ts-ignore
-	blob = new Blob([('' + onmessage).replace('function onmessage(ev)','onmessage = function(ev)')],{ type:'javascript/worker' })
+	blob = new Blob([('var ctx,  Canvas, degreesCurrent\n' + onmessage).replace('function onmessage(ev)','onmessage = function(ev)')],{ type:'javascript/worker' })
 
 	worker = new Worker(URL.createObjectURL(blob))
 

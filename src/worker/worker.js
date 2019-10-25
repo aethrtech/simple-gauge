@@ -1,5 +1,4 @@
-// if ('undefined' === typeof window) importScripts('./create.js')
-let currentCanvas, ctx
+var Canvas, ctx, degreesNew
 
 export const onmessage = function(ev){
     console.log(ev)
@@ -8,12 +7,26 @@ export const onmessage = function(ev){
             //@ts-ignore
             postMessage({type:ev.data.type})
         })
-        case 'update': return create(Object.assign(ev.data,{canvas:currentCanvas}),function(){
-            //@ts-ignore
-            postMessage({type:ev.data.type})
-        })
+        case 'update':
+            let degreesNew = action(ev.data.data,Canvas,30)
+            if (degreesNew === degreesCurrent) return
+            degreesCurrent = degreesNew
+            create({degrees:degreesNew}, function(){
+                //@ts-ignore
+                postMessage({type:ev.data.type})
+            })
+
+        
     }
 
+    function action(e, canvas, lineWidth){
+        let r = Math.sqrt((e.offsetX - canvas.width/2)**2 + (e.offsetY - canvas.width/2)**2)
+        if (r > canvas.width/2 - lineWidth + lineWidth/2 || r < canvas.width/2 - lineWidth - lineWidth/2) return
+        let quadrant = e.offsetY > 150 ? 180 : 0
+        if (e.offsetX < 150 && quadrant === 0) quadrant = 360
+        let angle = Math.ceil(Math.atan((e.offsetX - canvas.width/2) / (e.offsetY - canvas.width/2)) * 180 / Math.PI)
+        return Math.abs(quadrant - Math.abs(Math.ceil(angle)))
+    }
 
     function create(data,cb){
         let { canvas , 
@@ -28,12 +41,11 @@ export const onmessage = function(ev){
 
         // shallow copy object
 
-        if (canvas) currentCanvas = canvas
-    
         // const canvas = new OffscreenCanvas(canvas.width,canvas.height),
-        ctx = canvas.getContext('2d')
+        if (!Canvas) Canvas = canvas
+        if (!ctx) ctx = canvas.getContext('2d')
         //Clear the canvas everytime a chart is drawn
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.clearRect(0, 0, Canvas.width, Canvas.height)
     
     
         let text = ''
@@ -42,7 +54,7 @@ export const onmessage = function(ev){
         ctx.beginPath()
         ctx.strokeStyle = bgColor
         ctx.lineWidth = lineWidth
-        ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2-lineWidth, 0, Math.PI*2, false) //you can see the arc now
+        ctx.arc(Canvas.width/2, Canvas.height/2, Canvas.width/2-lineWidth, 0, Math.PI*2, false) //you can see the arc now
         ctx.stroke()
     
         //gauge will be a simple arc
@@ -53,7 +65,7 @@ export const onmessage = function(ev){
         ctx.lineWidth = lineWidth
         //The arc starts from the rightmost end. If we deduct 90 degrees from the angles
         //the arc will start from the topmost end
-        ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2-lineWidth, 0 - 90*Math.PI/180, radians - 90*Math.PI/180, false) 
+        ctx.arc(Canvas.width/2, Canvas.height/2, Canvas.width/2-lineWidth, 0 - 90*Math.PI/180, radians - 90*Math.PI/180, false) 
         //you can see the arc now
         ctx.stroke()
     
@@ -66,7 +78,7 @@ export const onmessage = function(ev){
         let text_width = ctx.measureText(text).width
         //adding manual value to position y since the height of the text cannot
         //be measured easily. There are hacks but we will keep it manual for now.
-        ctx.fillText(text, canvas.width/2 - text_width/2, canvas.height/2 + 15)
+        ctx.fillText(text, Canvas.width/2 - text_width/2, Canvas.height/2 + 15)
         cb()
     }
 
