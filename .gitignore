@@ -2,5 +2,4 @@ node_modules
 .vscode
 .cache
 dist
-test/e2e/index.js
-test/e2e/index.js.map
+e2e/scripts
