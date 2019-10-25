@@ -25,7 +25,7 @@ export const onmessage = function(ev){
         let quadrant = e.offsetY > 150 ? 180 : 0
         if (e.offsetX < 150 && quadrant === 0) quadrant = 360
         let angle = Math.ceil(Math.atan((e.offsetX - canvas.width/2) / (e.offsetY - canvas.width/2)) * 180 / Math.PI)
-        return Math.abs(quadrant - Math.abs(Math.ceil(angle)))
+        return Math.abs(quadrant - Math.ceil(angle))
     }
 
     function create(data,cb){
