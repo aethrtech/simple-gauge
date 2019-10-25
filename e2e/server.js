@@ -7,22 +7,21 @@ module.exports = function(){
     },
     { resolve } = require('path')
 
-
     http.createServer(function(req,res){
         switch(req.url){
             case '/':
                 res.setHeader('Content-Type','text/html')
-                var rs = fs.createReadStream(resolve('test','e2e','./index.html'))
+                var rs = fs.createReadStream(resolve('e2e','./index.html'))
                 .pipe(res)
                 break
             case '/index.js':
                     res.setHeader('Content-Type','text/javascript')
-                    var rs = fs.createReadStream(resolve('test','e2e','index.js'))
+                    var rs = fs.createReadStream(resolve('e2e','index.js'))
                     .pipe(res)
                 break
             case './index.js.map':
                     res.setHeader('Content-Type','text/pain')
-                    var rs = fs.createReadStream(resolve('test','e2e','index.js.map'))
+                    var rs = fs.createReadStream(resolve('e2e','index.js.map'))
                     .pipe(res)
 
         }
