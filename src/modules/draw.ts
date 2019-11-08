@@ -36,10 +36,9 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 					canvas[event.name] = ({ touches, target, offsetX, offsetY }) => worker.postMessage({event:event.name,
 						type:'update',
 						data:{ touches, target:{offsetLeft: target.offsetLeft }, offsetX, offsetY }
-					})
-					
+					})		
 				
-			}
+				}
 			case 'update': return function updated(){
 
 			}
