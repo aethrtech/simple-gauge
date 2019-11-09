@@ -16,7 +16,7 @@ module.exports = function(){
                     .pipe(res)
                 break
             case '/scripts/index.js.map':
-                    res.setHeader('Content-Type','text/pain')
+                    res.setHeader('Content-Type','application/json')
                     fs.createReadStream(resolve('e2e','scripts','index.js.map'))
                     .pipe(res)
 
