@@ -5,7 +5,7 @@ export const onmessage = function(ev){
     switch(ev.data.type){
         case 'create': return create(ev.data,function(){
             //@ts-ignore
-            postMessage({type:ev.data.type})
+            postMessage({type:ev.data.type,value:ev.data.degrees})
         })
         case 'update':
             let degreesNew = action(ev.data.data,Canvas,30)

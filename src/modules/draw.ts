@@ -33,6 +33,8 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 			case 'create': 
 				for (let event of events){
 					//@ts-ignore
+					canvas.value = e.data.value
+					//@ts-ignore
 					canvas[event.name] = ({ touches, target, offsetX, offsetY }) => worker.postMessage({event:event.name,
 						type:'update',
 						data:{ touches, target:{offsetLeft: target.offsetLeft }, offsetX, offsetY }

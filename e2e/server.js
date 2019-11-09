@@ -16,12 +16,12 @@ module.exports = function(){
                 break
             case '/index.js':
                     res.setHeader('Content-Type','text/javascript')
-                    var rs = fs.createReadStream(resolve('e2e','index.js'))
+                    var rs = fs.createReadStream(resolve('e2e','scripts','index.js'))
                     .pipe(res)
                 break
             case './index.js.map':
                     res.setHeader('Content-Type','text/pain')
-                    var rs = fs.createReadStream(resolve('e2e','index.js.map'))
+                    var rs = fs.createReadStream(resolve('e2e','scripts','index.js.map'))
                     .pipe(res)
 
         }
