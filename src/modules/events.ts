@@ -3,16 +3,4 @@ import onmouseup from './on-mouse-up'
 import onmousemove from './on-mouse-move'
 import handlemove from './handle-move'
 
-export default [{
-        name: 'onmouseup',
-        // fn: onmouseup
-    },
-    {
-        name: 'onmousedown',
-        // fn: onmousedown
-    },
-    {
-        name:'onmousemove',
-        // fn: onmousemove
-    }
-]
+export default ['onmousedown','onmousemove','onmouseup']

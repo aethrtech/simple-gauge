@@ -1,13 +1,13 @@
 //@ts-ignore
 import { onmessage } from '../worker/worker'
 import events from './events'
+import handleMove from './handle-move'
 
 export default function draw(container:HTMLElement, degrees = 0, cb:Function):void{
 
 	let blob, worker:any
-	console.log('var ctx \n' + onmessage)
 	//@ts-ignore
-	blob = new Blob([('var ctx,  Canvas, degreesCurrent\n' + onmessage).replace('function onmessage(ev)','onmessage = function(ev)')],{ type:'javascript/worker' })
+	blob = new Blob([('var ctx,  Canvas, isSetting, degreesCurrent\n' + onmessage).replace('function onmessage(ev)','onmessage = function(ev)')],{ type:'javascript/worker' })
 
 	worker = new Worker(URL.createObjectURL(blob))
 
@@ -33,14 +33,31 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 			case 'create': 
 				for (let event of events){
 					//@ts-ignore
-					canvas.value = e.data.value
+					container.setAttribute('value',ev.data.value)
 					//@ts-ignore
-					canvas[event.name] = ({ touches, target, offsetX, offsetY }) => worker.postMessage({event:event.name,
+					canvas[event] = ({ target, offsetX, offsetY }) => worker.postMessage({event:event,
 						type:'update',
-						data:{ touches, target:{offsetLeft: target.offsetLeft }, offsetX, offsetY }
+						data:{ target:{offsetLeft: target.offsetLeft }, offsetX, offsetY }
 					})		
 				
 				}
+				canvas.addEventListener('touchmove',(ev) => {
+					ev.preventDefault()
+					let {touches, target } = ev
+					//@ts-ignore
+					let x = touches[0].clientX - target.offsetLeft,
+					y = touches[0].clientY
+					
+					worker.postMessage({
+						type:'update',
+						data:{
+							//@ts-ignore
+							target:{offsetLeft:target.offsetLeft},
+							offsetX:x,offsetY:y
+
+						}
+					})
+				},false)
 			case 'update': return function updated(){
 
 			}
