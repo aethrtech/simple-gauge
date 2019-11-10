@@ -9,6 +9,7 @@ export const onmessage = function(ev){
         })
         case 'update':
             let degreesNew = action(ev.data.data,Canvas,30)
+            if (!degreesNew) return
             if (ev.data.event === 'onmousedown') isSetting = true
             if (ev.data.event === 'onmouseup')  isSetting = false
             if (ev.data.event === 'onmousemove' && !isSetting) return
