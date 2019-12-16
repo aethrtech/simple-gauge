@@ -1,10 +1,18 @@
 const cy = require('cypress')
-const build = require('./build-test')
-const server = require('../e2e/server')
+build = require('./build-test'),
+server = require('../e2e/server'),
 
-build(function(){
-    server()
-    cy.open()
+server(function(){
+
+    build(async function(err){
+
+        if (err) throw new Error(err)
+
+        await cy.open()
+
+        process.exit()        
+
+    })
     
 })
 

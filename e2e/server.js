@@ -1,4 +1,4 @@
-module.exports = function(){
+module.exports = function(callback){
     const http = require('http'),
     fs = require('fs'),
     { resolve } = require('path')
@@ -21,7 +21,8 @@ module.exports = function(){
                     .pipe(res)
 
         }
-    
 
     }).listen(8080)
+
+    callback()
 }

@@ -1,29 +1,26 @@
-module.exports = function(callback){
+const Bundler = require('parcel-bundler'),
+{ resolve } = require('path'),
 
-    const Bundler = require('parcel-bundler'),
-    { resolve } = require('path'),
-    options = {
-        outDir:resolve(__dirname,'..','e2e','scripts'),
-        outFile:'index.js',
-        global:'SimpleGauge',
-        target:'browser',
-        watch:true,
-        sourceMaps:true
-    },
+options = {
+    outDir:resolve(__dirname,'..','e2e','scripts'),
+    outFile:'index.js',
+    global:'SimpleGauge',
+    target:'browser',
+    watch:true,
+    sourceMaps:true
+},
+entryFile = resolve(__dirname,'../src/modules/index.ts'),
+bundler = new Bundler(entryFile,options)
 
-    entryFile = resolve(__dirname,'../src/modules/index.ts'),
-    bundler = new Bundler(entryFile,options)
 
-    async function build(){
+module.exports = async function(callback){
 
-        try {
-            await bundler.bundle()
-            callback()
-        } catch(err){
-            console.error(`\u001b[31m${err}\u001b[0m`)
-        }
+    try {
+        await bundler.bundle()
+
+    } catch (err) {
+        return callback(err)
     }
-
-    build()
-
+    return callback()
+    
 }
