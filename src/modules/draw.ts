@@ -56,16 +56,11 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 						}
 					})
 				},false)
-			case 'update': return function updated(){
+				break
+			case 'update': 
+				container.setAttribute('data-value',ev.data.value)
 
-			}
 		}
-		// worker.terminate()
-		//@ts-ignore
-		container.postMessage = worker.postMessage
-		//@ts-ignore
-		container.onmessage = worker.onmessage
-		cb(null,{data:ev.data,worker})
 	}
-	// cb()
+	
 }
