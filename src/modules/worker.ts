@@ -15,9 +15,9 @@ onmessage = function(ev){
             if (ev.data.event === 'onmousemove' && !isSetting) return
             if (ev.data.event === 'touchmove' && !isSetting) return
             if (degreesNew === degreesCurrent) return
-            animate(ev.data.data.currentValue,action(ev.data.data,Canvas,30), function(){
+            animate(ev.data.data.currentValue,action(ev.data.data,Canvas,30), function(value){
                 //@ts-ignore
-                postMessage({type:ev.data.type})
+                postMessage({type:ev.data.type,value})
             })
 
         
@@ -65,18 +65,21 @@ onmessage = function(ev){
         
     }
 
-    function animate(oldAngle, newAngle,cb){
+    async function animate(oldAngle, newAngle,cb){
         let currentAngle = oldAngle
         for (let i = 0; i < Math.abs(newAngle - oldAngle); i++){
             try {
-                draw(currentAngle)
+                await new Promise(function(resolve){
+                    draw(currentAngle)
+                    resolve()
+                })
             } catch(err){
                 console.error(`\u001b[1;34m${err}\u001b[0m`)
                 return cb()
             }
             newAngle > oldAngle ? ++currentAngle : --currentAngle
         }
-        cb()
+        cb(currentAngle)
 
     }
 
