@@ -1,15 +1,11 @@
-//@ts-ignore
-import { onmessage } from '../worker/worker'
 import events from './events'
 import handleMove from './handle-move'
 
 export default function draw(container:HTMLElement, degrees = 0, cb:Function):void{
 
-	let blob, worker:any
-	//@ts-ignore
-	blob = new Blob([('var ctx,  Canvas, isSetting, degreesCurrent\n' + onmessage).replace('function onmessage(ev)','onmessage = function(ev)')],{ type:'javascript/worker' })
+	let worker:Worker
 
-	worker = new Worker(URL.createObjectURL(blob))
+	worker = new Worker('./worker.ts')
 
 	let canvas = document.createElement('canvas')
 
@@ -17,14 +13,14 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 	canvas.height = container.offsetHeight
 
 	container.append(canvas)
+
 	let offscreen
+
 	try {
 		offscreen = canvas.transferControlToOffscreen()
 	} catch {
 
 	}
-
-	
 
 	worker.postMessage({canvas:offscreen,degrees,type:'create'}, [offscreen])
 
