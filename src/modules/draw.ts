@@ -33,11 +33,13 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 			case 'create': 
 				for (let event of events){
 					//@ts-ignore
-					container.setAttribute('value',ev.data.value)
+					container.setAttribute('data-value',ev.data.value)
+					container['data-value'] = ev.data.value
 					//@ts-ignore
 					canvas[event] = ({ target, offsetX, offsetY }) => worker.postMessage({event:event,
 						type:'update',
-						data:{ target:{offsetLeft: target.offsetLeft }, offsetX, offsetY }
+						//@ts-ignore
+						data:{ target:{offsetLeft: target.offsetLeft }, offsetX, offsetY, currentValue:container['data-value'] }
 					})		
 				
 				}

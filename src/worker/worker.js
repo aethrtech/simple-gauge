@@ -1,4 +1,4 @@
-var Canvas, ctx, isSetting, degreesNew
+var Canvas, ctx, isSetting
 
 export const onmessage = function(ev){
     // console.log(ev)
@@ -15,13 +15,69 @@ export const onmessage = function(ev){
             if (ev.data.event === 'onmousemove' && !isSetting) return
             if (ev.data.event === 'touchmove' && !isSetting) return
             if (degreesNew === degreesCurrent) return
-            degreesCurrent = degreesNew
-            create({degrees:degreesNew}, function(){
+            animate(ev.data.data.currentValue,action(ev.data.data,Canvas,30), function(){
                 //@ts-ignore
                 postMessage({type:ev.data.type})
             })
 
         
+    }
+
+    function draw(degrees){
+
+        let color = 'limegreen', 
+            bgColor = '#222', 
+            lineWidth = 30, 
+            fontSize = '50px', 
+            font = 'arial', 
+            units = '',
+            divisor = 1 
+
+        //Background 360 degree arc
+        ctx.beginPath()
+        ctx.strokeStyle = bgColor
+        ctx.lineWidth = lineWidth
+        ctx.arc(Canvas.width/2, Canvas.height/2, Canvas.width/2-lineWidth, 0, Math.PI*2, false) //you can see the arc now
+        ctx.stroke()
+    
+        //gauge will be a simple arc
+        //Angle in radians = angle in degrees * PI / 180
+        var radians = degrees * Math.PI / 180
+        ctx.beginPath()
+        ctx.strokeStyle = color
+        ctx.lineWidth = lineWidth
+        //The arc starts from the rightmost end. If we deduct 90 degrees from the angles
+        //the arc will start from the topmost end
+        ctx.arc(Canvas.width/2, Canvas.height/2, Canvas.width/2-lineWidth, 0 - 90*Math.PI/180, radians - 90*Math.PI/180, false) 
+        //you can see the arc now
+        ctx.stroke()
+    
+        //Lets add the text
+        ctx.fillStyle = color
+        ctx.font = `${ fontSize } ${ font }`
+        text = Math.ceil(degrees / 360 * divisor) + units
+        //Lets center the text
+        //deducting half of text width from position x
+        let text_width = ctx.measureText(text).width
+        //adding manual value to position y since the height of the text cannot
+        //be measured easily. There are hacks but we will keep it manual for now.
+        ctx.fillText(text, Canvas.width/2 - text_width/2, Canvas.height/2 + 15)
+        
+    }
+
+    function animate(oldAngle, newAngle,cb){
+        currentAngle = oldAngle
+        for (let i = 0; i < Math.abs(newAngle - oldAngle); i++){
+            try {
+                    draw(currentAngle)
+            } catch(err){
+                console.error(`\u001b[1;34m${err}\u001b[0m`)
+                return cb()
+            }
+            newAngle > oldAngle ? ++currentAngle : --currentAngle
+        }
+        cb()
+
     }
 
     function action(e, canvas, lineWidth){

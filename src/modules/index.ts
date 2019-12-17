@@ -1,5 +1,4 @@
 import create from './draw'
-import update from './update'
 
 let state = {
     drawn:false,
@@ -15,6 +14,5 @@ let state = {
 }
 
 export default {
-    create,
-    update
+    create
 }
