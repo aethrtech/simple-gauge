@@ -24,7 +24,7 @@ onmessage = function(ev){
     }
 
     function draw(degrees){
-
+        ctx.clearRect(0, 0, Canvas.width, Canvas.height)
         let color = 'limegreen', 
             bgColor = '#222', 
             lineWidth = 30, 
@@ -55,7 +55,8 @@ onmessage = function(ev){
         //Lets add the text
         ctx.fillStyle = color
         ctx.font = `${ fontSize } ${ font }`
-        let text = Math.ceil(degrees / 360 * divisor) + units
+        // let text = Math.ceil(degrees / 360 * divisor) + units
+        let text = degrees
         //Lets center the text
         //deducting half of text width from position x
         let text_width = ctx.measureText(text).width
@@ -79,6 +80,8 @@ onmessage = function(ev){
             }
             newAngle > oldAngle ? ++currentAngle : --currentAngle
         }
+        // draw the final frame
+        draw(currentAngle)
         cb(currentAngle)
 
     }
@@ -99,7 +102,7 @@ onmessage = function(ev){
         lineWidth = 30, 
         fontSize = '50px', 
         font = 'arial', 
-        units = '', 
+        units = '',   
         degrees = 0, 
         divisor = 1 } = data
 
