@@ -1,5 +1,6 @@
 import events from './events'
 import handleMove from './handle-move'
+import update from './update'
 
 export default function draw(container:HTMLElement, degrees = 0, cb:Function):void{
 
@@ -38,6 +39,10 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 						data:{ target:{offsetLeft: target.offsetLeft }, offsetX, offsetY, currentValue:container['data-value'] }
 					})		
 				
+				}
+				//@ts-ignore
+				container.update = function(value){
+					update(value, worker)
 				}
 				canvas.addEventListener('touchmove',(ev) => {
 					ev.preventDefault()

@@ -1,9 +1,4 @@
-export default function update(container:HTMLElement, degrees = 0, worker:any,cb:Function):void{
+export default function update(value = 0, worker:any):void{
 
-    worker.postMessage({type:'update', degrees})
-
-    worker.onmessage = function(ev:any){
-        cb(null, {data:{type:'update'}})
-    }
-
+    worker.postMessage({type:'update', value})
 }
