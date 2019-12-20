@@ -140,7 +140,7 @@ onmessage = function(ev){
         degrees = 0, 
         divisor = 1 } = data
 
-        state = { canvas, color, bgColor, lineWidth, fontSize, font, units, degrees, divisor }
+        state = {...state,...data }
 
         // shallow copy object
 
