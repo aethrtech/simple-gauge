@@ -1,12 +1,12 @@
 # API
 
-- [create()]()
+- [create()](#create)
 
-- [update()]()
+- [update()](#update)
 
-- [restyle()]()
+- [restyle()](#restyle)
 
-- [destroy()]()
+- [destroy()](#destroy)
 
 ## create(Container \<HTML Element\>, Value \<Number\>[, Options \<Object\> [,Callback \<Function\>]])\<void\>
 
@@ -58,6 +58,7 @@ Example:
 
 ```javascript
 ```
+
 ## HTMLElement.destroy(Callback \<Function\>)\<void\>
 
 - Callback:
