@@ -1,6 +1,7 @@
 import events from './events'
 import handleMove from './handle-move'
 import update from './update'
+import restyle from './restyle'
 
 export default function draw(container:HTMLElement, degrees = 0, cb:Function):void{
 
@@ -41,10 +42,14 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 				
 				}
 				//@ts-ignore
-				container.update = function(value){
+				container.update = function(value:number){
 					update(value, worker)
 				}
-				canvas.addEventListener('touchmove',(ev) => {
+				//@ts-ignore
+				container.restyle = function(style:object){
+					restyle(style,worker)
+				}
+				return canvas.addEventListener('touchmove',(ev) => {
 					ev.preventDefault()
 					let {touches, target } = ev
 					//@ts-ignore
@@ -61,9 +66,11 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 						}
 					})
 				},false)
-				break
+				
 			case 'update': 
-				container.setAttribute('data-value',ev.data.value)
+				return container.setAttribute('data-value',ev.data.value)
+			case 'restyle':
+				return
 
 		}
 	}

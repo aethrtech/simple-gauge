@@ -1,7 +1,34 @@
-var Canvas, ctx, isSetting, degreesCurrent
+interface State {
+    canvas:any,
+    color?: string,
+    bgColor?: string,
+    lineWidth?: number,
+    fontSize?: string,
+    font?: string,
+    units?: string,
+    divisor?: number,
+    valueMax?: number
+    value?:number,
+    degrees?:number
+}
+
+let Canvas, ctx, isSetting, degreesCurrent, 
+state:State = {
+canvas : '',
+color : 'limegreen', 
+bgColor : '#222', 
+lineWidth : 30, 
+fontSize : '50px', 
+font : 'arial', 
+units : '',   
+degrees : 0, 
+divisor : 1,
+valueMax: 100,
+value:0 
+}
 
 onmessage = function(ev){
-    // console.log(ev)
+
     switch(ev.data.type){
         case 'create': return create(ev.data,function(){
             //@ts-ignore
@@ -9,7 +36,8 @@ onmessage = function(ev){
         })
         case 'update':
             if (ev.data.value){
-                draw(ev.data.value)
+                draw(ev.data.value) 
+                state.value = ev.data.value
                 //@ts-ignore
                 return postMessage({type:'update',value:ev.data.value})
             }
@@ -22,46 +50,47 @@ onmessage = function(ev){
             if (degreesNew === degreesCurrent) return
             animate(ev.data.data.currentValue,action(ev.data.data,Canvas,30), function(value){
                 //@ts-ignore
-                postMessage({type:ev.data.type,value})
+                return postMessage({type:ev.data.type,value})
             })
+        case 'restyle':
+                return restyle(ev.data.value, function(err){
+                    //@ts-ignore
+                    return postMessage()
+                })
+    }
+
+    function restyle(style:object, cb:Function){
+        state = {...state, ...style}
     }
 
     function draw(degrees){
         ctx.clearRect(0, 0, Canvas.width, Canvas.height)
-        let color = 'limegreen', 
-            bgColor = '#222', 
-            lineWidth = 30, 
-            fontSize = '50px', 
-            font = 'arial', 
-            units = '',
-            divisor = 1,
-            valueMax = 60 
 
         //Background 360 degree arc
         ctx.beginPath()
-        ctx.strokeStyle = bgColor
-        ctx.lineWidth = lineWidth
-        ctx.arc(Canvas.width/2, Canvas.height/2, Canvas.width/2-lineWidth, 0, Math.PI*2, false) //you can see the arc now
+        ctx.strokeStyle = state.bgColor
+        ctx.lineWidth = state.lineWidth
+        ctx.arc(Canvas.width/2, Canvas.height/2, Canvas.width/2-state.lineWidth, 0, Math.PI*2, false) //you can see the arc now
         ctx.stroke()
     
         //gauge will be a simple arc
         //Angle in radians = angle in degrees * PI / 180
         var radians = degrees * Math.PI / 180
         ctx.beginPath()
-        ctx.strokeStyle = color
-        ctx.lineWidth = lineWidth
+        ctx.strokeStyle = state.color
+        ctx.lineWidth = state.lineWidth
         //The arc starts from the rightmost end. If we deduct 90 degrees from the angles
         //the arc will start from the topmost end
-        ctx.arc(Canvas.width/2, Canvas.height/2, Canvas.width/2-lineWidth, 0 - 90*Math.PI/180, radians - 90*Math.PI/180, false) 
+        ctx.arc(Canvas.width/2, Canvas.height/2, Canvas.width/2-state.lineWidth, 0 - 90*Math.PI/180, radians - 90*Math.PI/180, false) 
         //you can see the arc now
         ctx.stroke()
     
         //Lets add the text
-        ctx.fillStyle = color
-        ctx.font = `${ fontSize } ${ font }`
+        ctx.fillStyle = state.color
+        ctx.font = `${ state.fontSize } ${ state.font }`
         // let text = Math.ceil(degrees / 360 * divisor) + units
         // let text = degrees
-        let text = valueMax / 360 * degrees
+        let text = state.valueMax / 360 * degrees
         //Lets center the text
         //deducting half of text width from position x
         let text_width = ctx.measureText(text).width
@@ -110,6 +139,8 @@ onmessage = function(ev){
         units = '',   
         degrees = 0, 
         divisor = 1 } = data
+
+        state = { canvas, color, bgColor, lineWidth, fontSize, font, units, degrees, divisor }
 
         // shallow copy object
 
