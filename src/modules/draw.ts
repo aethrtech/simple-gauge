@@ -3,7 +3,7 @@ import handleMove from './handle-move'
 import update from './update'
 import restyle from './restyle'
 
-export default function draw(container:HTMLElement, value = 0, cb:Function):void{
+export default function draw(container:HTMLElement, value = 0, options?:any, cb?:Function):void{
 
 	let worker:Worker
 
@@ -24,7 +24,7 @@ export default function draw(container:HTMLElement, value = 0, cb:Function):void
 
 	}
 
-	worker.postMessage({canvas:offscreen, value, type:'create'}, [offscreen])
+	worker.postMessage({canvas:offscreen, value, type:'create', ...options}, [offscreen])
 
 	worker.onmessage = (ev:any) => {
 		switch(ev.data.type){

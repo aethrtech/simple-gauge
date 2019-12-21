@@ -55,7 +55,7 @@ onmessage = function(ev){
             let degreesNew = action(ev.data.data,Canvas,30)
             if (!degreesNew) return
             if (ev.data.event === 'onmousedown') isSetting = true
-            if (ev.data.event === 'onmouseup')  isSetting = false
+            if (ev.data.event === 'onmouseup')  return isSetting = false
             if (ev.data.event === 'onmousemove' && !isSetting) return
             if (ev.data.event === 'touchmove' && !isSetting) return
             if (degreesNew === state.degrees) return
@@ -128,6 +128,8 @@ onmessage = function(ev){
         angleDiff = Math.abs(angleOld - angleNew),
         count = 0
 
+        if (angleDiff < 2) return cb(state.value,state.degrees)
+
         state.loop = setInterval(function(){
             
             requestAnimationFrame(function(){
@@ -160,18 +162,18 @@ onmessage = function(ev){
     }
 
     function create(data,cb){
-        let { canvas , 
-        color = 'limegreen', 
-        bgColor = '#222', 
-        lineWidth = 30, 
-        fontSize = '50px', 
-        font = 'arial', 
-        units = '', 
-        divisor = 1,
-        value,
-        toFixed = 0 } = data
+        let { canvas  = data,
+            color = 'limegreen', 
+            bgColor = '#222', 
+            lineWidth = 30, 
+            fontSize = '50px', 
+            font = 'arial', 
+            units = '', 
+            divisor = 1,
+            value,
+            toFixed = 0 } = data
 
-        state = {...state,...data }
+        state = {...state, ...data }
 
         // shallow copy object
 
