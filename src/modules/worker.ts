@@ -52,12 +52,12 @@ onmessage = function(ev){
                 }) 
                 
             }
-            let degreesNew = action(ev.data.data,Canvas,30)
-            if (!degreesNew) return
             if (ev.data.event === 'onmousedown') isSetting = true
             if (ev.data.event === 'onmouseup')  return isSetting = false
             if (ev.data.event === 'onmousemove' && !isSetting) return
             if (ev.data.event === 'touchmove' && !isSetting) return
+            let degreesNew = action(ev.data.data,Canvas,30)
+            if (!degreesNew) return
             if (degreesNew === state.degrees) return
             if (state.isDrawing) return
             animate(state.degrees,action(ev.data.data,Canvas,state.lineWidth), function(value, angle){
@@ -156,9 +156,12 @@ onmessage = function(ev){
         let r = Math.sqrt((e.offsetX - canvas.width/2)**2 + (e.offsetY - canvas.width/2)**2)
         if (r > canvas.width/2 - lineWidth + lineWidth/2 || r < canvas.width/2 - lineWidth - lineWidth/2) return
         let quadrant = e.offsetY > 150 ? 180 : 0
-        if (e.offsetX < 150 && quadrant === 0) quadrant = 360
-        let angle = Math.ceil(Math.atan((e.offsetX - canvas.width/2) / (e.offsetY - canvas.width/2)) * 180 / Math.PI)
+        
+        // console.log(`quadrant: ${quadrant}`)
+        let angle = (Math.atan((e.offsetX - canvas.width/2) / (e.offsetY - canvas.height/2)) * 180 / Math.PI)
+        if (e.offsetX < 150 && quadrant === 0) { quadrant = 360; angle = Math.abs(angle) }
         return Math.abs(quadrant - Math.ceil(angle))
+        
     }
 
     function create(data,cb){
