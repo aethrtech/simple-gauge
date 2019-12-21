@@ -9,7 +9,11 @@ interface State {
     divisor?: number,
     valueMax?: number
     value?:number,
-    degrees?:number
+    degrees?:number,
+    valueCurrent?:number,
+    toFixed:number,
+    isDrawing:boolean,
+    loop?:any
 }
 
 let Canvas, ctx, isSetting, degreesCurrent, 
@@ -24,22 +28,29 @@ units : '',
 degrees : 0, 
 divisor : 1,
 valueMax: 100,
-value:0 
+value:0,
+valueCurrent:0,
+toFixed:0,
+isDrawing:false
 }
 
 onmessage = function(ev){
-
     switch(ev.data.type){
         case 'create': return create(ev.data,function(){
+            state.valueCurrent = state.value
+            state.degrees = state.value / state.valueMax * 360
             //@ts-ignore
             postMessage({type:ev.data.type,value:ev.data.degrees})
         })
         case 'update':
+            
             if (ev.data.value){
-                draw(ev.data.value) 
-                state.value = ev.data.value
-                //@ts-ignore
-                return postMessage({type:'update',value:ev.data.value})
+                return draw(ev.data.value,function(){
+                    state = {...state,...{value:ev.data.value}}
+                    //@ts-ignore
+                    return postMessage({type:'update',value:ev.data.value})
+                }) 
+                
             }
             let degreesNew = action(ev.data.data,Canvas,30)
             if (!degreesNew) return
@@ -47,8 +58,12 @@ onmessage = function(ev){
             if (ev.data.event === 'onmouseup')  isSetting = false
             if (ev.data.event === 'onmousemove' && !isSetting) return
             if (ev.data.event === 'touchmove' && !isSetting) return
-            if (degreesNew === degreesCurrent) return
-            animate(ev.data.data.currentValue,action(ev.data.data,Canvas,30), function(value){
+            if (degreesNew === state.degrees) return
+            if (state.isDrawing) return
+            animate(state.degrees,action(ev.data.data,Canvas,state.lineWidth), function(value, angle){
+                state.value = value
+                state.isDrawing = false
+                state.degrees = angle
                 //@ts-ignore
                 return postMessage({type:ev.data.type,value})
             })
@@ -63,8 +78,11 @@ onmessage = function(ev){
         state = {...state, ...style}
     }
 
-    function draw(degrees){
+    function draw(value:number,callback:Function){
+
         ctx.clearRect(0, 0, Canvas.width, Canvas.height)
+
+        let degrees = value / state.valueMax *360
 
         //Background 360 degree arc
         ctx.beginPath()
@@ -88,35 +106,47 @@ onmessage = function(ev){
         //Lets add the text
         ctx.fillStyle = state.color
         ctx.font = `${ state.fontSize } ${ state.font }`
-        // let text = Math.ceil(degrees / 360 * divisor) + units
-        // let text = degrees
-        let text = state.valueMax / 360 * degrees
+        let text = Number(state.valueMax / 360 * degrees).toFixed(state.toFixed) + state.units
         //Lets center the text
         //deducting half of text width from position x
         let text_width = ctx.measureText(text).width
         //adding manual value to position y since the height of the text cannot
         //be measured easily. There are hacks but we will keep it manual for now.
         ctx.fillText(text, Canvas.width/2 - text_width/2, Canvas.height/2 + 15)
+
+        callback(value,degrees)
         
     }
 
-    async function animate(oldAngle, newAngle,cb){
-        let currentAngle = oldAngle
-        for (let i = 0; i < Math.abs(newAngle - oldAngle); i++){
-            try {
-                await new Promise(function(resolve){
-                    draw(currentAngle)
-                    resolve()
+    async function animate(angleOld:number, angleNew:number, cb:Function){
+        state = {...state, ...{isDrawing:true}}
+        clearInterval(state.loop)
+        let { valueMax } = state,
+        angleNext = angleOld,
+        valueStep = valueMax / 360,
+        valueNext = state.value,
+        angleDiff = Math.abs(angleOld - angleNew),
+        count = 0
+
+        state.loop = setInterval(function(){
+            
+            requestAnimationFrame(function(){
+                draw(valueNext,function(value, angle){
+                    if (count > angleDiff) {
+                        clearInterval(state.loop)
+                        return cb(value, angle)
+                    }
+                    angleNew > angleOld  ? ++angleNext : --angleNext
+                    angleNew > angleOld ? valueNext += valueStep : valueNext -= valueStep
+                    ++count
                 })
-            } catch(err){
-                console.error(`\u001b[1;34m${err}\u001b[0m`)
-                return cb()
-            }
-            newAngle > oldAngle ? ++currentAngle : --currentAngle
-        }
+            })
+        },0)
+        
+
         // draw the final frame
-        draw(currentAngle)
-        cb(currentAngle)
+        // draw(valueNew)
+        
 
     }
 
@@ -136,9 +166,10 @@ onmessage = function(ev){
         lineWidth = 30, 
         fontSize = '50px', 
         font = 'arial', 
-        units = '',   
-        degrees = 0, 
-        divisor = 1 } = data
+        units = '', 
+        divisor = 1,
+        value,
+        toFixed = 0 } = data
 
         state = {...state,...data }
 
@@ -148,9 +179,7 @@ onmessage = function(ev){
         if (!Canvas) Canvas = canvas
         if (!ctx) ctx = canvas.getContext('2d')
         
-            draw(degrees)
-
-        cb()
+            draw(state.value, cb)
     }
 
 }

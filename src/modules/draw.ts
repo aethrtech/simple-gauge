@@ -3,7 +3,7 @@ import handleMove from './handle-move'
 import update from './update'
 import restyle from './restyle'
 
-export default function draw(container:HTMLElement, degrees = 0, cb:Function):void{
+export default function draw(container:HTMLElement, value = 0, cb:Function):void{
 
 	let worker:Worker
 
@@ -24,7 +24,7 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 
 	}
 
-	worker.postMessage({canvas:offscreen,degrees,type:'create'}, [offscreen])
+	worker.postMessage({canvas:offscreen, value, type:'create'}, [offscreen])
 
 	worker.onmessage = (ev:any) => {
 		switch(ev.data.type){
@@ -37,7 +37,7 @@ export default function draw(container:HTMLElement, degrees = 0, cb:Function):vo
 					canvas[event] = ({ target, offsetX, offsetY }) => worker.postMessage({event:event,
 						type:'update',
 						//@ts-ignore
-						data:{ target:{offsetLeft: target.offsetLeft }, offsetX, offsetY, currentValue:container['data-value'] }
+						data:{ target:{offsetLeft: target.offsetLeft }, offsetX, offsetY }
 					})		
 				
 				}
