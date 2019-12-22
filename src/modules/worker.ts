@@ -45,8 +45,8 @@ onmessage = function(ev){
         case 'update':
             
             if (ev.data.value){
-                return draw(ev.data.value,function(){
-                    state = {...state,...{value:ev.data.value}}
+                return draw(ev.data.value,function(value, degrees){
+                    state = {...state,...{value, degrees}}
                     //@ts-ignore
                     return postMessage({type:'update',value:ev.data.value})
                 }) 
@@ -144,12 +144,6 @@ onmessage = function(ev){
                 })
             })
         },0)
-        
-
-        // draw the final frame
-        // draw(valueNew)
-        
-
     }
 
     function action(e, canvas, lineWidth){
@@ -157,11 +151,9 @@ onmessage = function(ev){
         if (r > canvas.width/2 - lineWidth + lineWidth/2 || r < canvas.width/2 - lineWidth - lineWidth/2) return
         let quadrant = e.offsetY > 150 ? 180 : 0
         
-        // console.log(`quadrant: ${quadrant}`)
         let angle = (Math.atan((e.offsetX - canvas.width/2) / (e.offsetY - canvas.height/2)) * 180 / Math.PI)
         if (e.offsetX < 150 && quadrant === 0) { quadrant = 360; angle = Math.abs(angle) }
         return Math.abs(quadrant - Math.ceil(angle))
-        
     }
 
     function create(data,cb){
