@@ -2,6 +2,7 @@ import events from './events'
 import handleMove from './handle-move'
 import update from './update'
 import restyle from './restyle'
+import terminate from './terminate'
 
 export default function draw(container:HTMLElement, value = 0, options?:any, cb?:Function):void{
 
@@ -48,6 +49,12 @@ export default function draw(container:HTMLElement, value = 0, options?:any, cb?
 				//@ts-ignore
 				container.restyle = function(style:object){
 					restyle(style,worker)
+				}
+				//@ts-ignore
+				container.terminate = function(callback:object){
+					terminate(worker, function(err){
+						if (err) return console.error(err)
+					})
 				}
 				return canvas.addEventListener('touchmove',(ev) => {
 					ev.preventDefault()
