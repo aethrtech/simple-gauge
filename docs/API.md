@@ -8,7 +8,7 @@
 
 - [destroy()](#destroy)
 
-## create(Container, Value[, Options [,Callback ]]): void
+<h2 id="create">create(Container, Value[, Options [,Callback ]]): void</h2>
 
 - `Container` \<HTMLElement\>
 
@@ -33,7 +33,7 @@ Example:
 ```javascript
 ```
 
-## HTMLElement.update(Value[, callback]): void
+<h2 id="update">HTMLElement.update(Value[, callback]): void</h2>
 
 - `Value` \<Number\>
 
