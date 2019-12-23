@@ -2,11 +2,11 @@
 
 - [create()](#create)
 
-- [update()](#update)
+- [destroy()](#destroy)
 
 - [restyle()](#restyle)
 
-- [destroy()](#destroy)
+- [update()](#update)
 
 <h2 id="create">create(Container, Value[, Options [,Callback ]]): void</h2>
 
@@ -14,11 +14,11 @@
 
 - `Value` \<Number\>
 
-- _(optional)_ `Options` \<Object\>
+- `Options` \<Object\>
 
   - TODO
 
-- _(optional)_ `Callback` \<Function\>
+- `Callback` \<Function\>
 
   - `Error` \<Object\>
 
@@ -27,6 +27,36 @@
 Creates a new gauge. This should only be called once _per gauge_.
 
 Upon the gauge's creation, a new instance of [worker]() is created for it.
+
+Example:
+
+```javascript
+```
+
+<h2 id="destroy">HTMLElement.destroy(Callback): void</h2>
+
+- `Callback`
+
+  - `Error` Object
+
+> **Note:** To be used _after_ creating a new gauge.
+
+Destroys the gauge's web worker.
+
+Example:
+
+```javascript
+```
+
+<h2 id="restyle">HTMLElement.restyle(options[,Callback]): void</h2>
+
+- `options` \<Object\>
+
+- `Callback` \<Function\>
+
+> **Note:** To be used _after_ creating a new gauge.
+
+Imperatively update the gauge's style.
 
 Example:
 
@@ -42,37 +72,6 @@ Example:
 > **Note:** To be used _after_ creating a new gauge.
 
 Imperatively update the gauge's value.
-
-Example:
-
-```javascript
-```
-
-## HTMLElement.restyle(options[,Callback]): void
-
-- `options` \<Object\>
-
-- `Callback` \<Function\>
-
-> **Note:** To be used _after_ creating a new gauge.
-
-Imperatively update the gauge's style.
-
-Example:
-
-```javascript
-```
-
-## HTMLElement.terminate(Callback): void
-
-- `Callback`
-
-  - `Error` Object
-  
-
-> **Note:** To be used _after_ creating a new gauge.
-
-Destroys the gauge's web worker.
 
 Example:
 
