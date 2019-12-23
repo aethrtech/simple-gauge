@@ -2,7 +2,7 @@ import events from './events'
 import handleMove from './handle-move'
 import update from './update'
 import restyle from './restyle'
-import terminate from './terminate'
+import destroy from './destroy'
 
 export default function draw(container:HTMLElement, value = 0, options?:any, cb?:Function):void{
 
@@ -51,8 +51,8 @@ export default function draw(container:HTMLElement, value = 0, options?:any, cb?
 					restyle(style,worker)
 				}
 				//@ts-ignore
-				container.terminate = function(callback:object){
-					terminate(worker, function(err){
+				container.destroy = function(callback:object){
+					destroy(worker, function(err){
 						if (err) return console.error(err)
 					})
 				}

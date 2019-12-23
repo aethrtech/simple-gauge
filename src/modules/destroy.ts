@@ -1,4 +1,4 @@
-export default function terminate(worker:Worker, callback:Function){
+export default function destroy(worker:Worker, callback:Function){
     try {
         worker.terminate()
     } catch(err){
