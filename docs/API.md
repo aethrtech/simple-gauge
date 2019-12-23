@@ -8,21 +8,21 @@
 
 - [destroy()](#destroy)
 
-## create(Container \<HTML Element\>, Value \<Number\>[, Options \<Object\> [,Callback \<Function\>]])\<void\>
+## create(Container, Value[, Options [,Callback ]]): void
 
-- Container: **HTMLElement**
+- `Container` \<HTMLElement\>
 
-- Value: **Number**
+- `Value` \<Number\>
 
-- _(optional)_ Options: **Object**
+- _(optional)_ `Options` \<Object\>
 
   - TODO
 
-- _(optional)_ Callback: **Function**
+- _(optional)_ `Callback` \<Function\>
 
-  - Error: **Exception**
+  - `Error` \<Object\>
 
-  - value: **Number**
+  - `Value` \<Number\>
 
 Creates a new gauge. This should only be called once _per gauge_.
 
@@ -33,9 +33,11 @@ Example:
 ```javascript
 ```
 
-## HTMLElement.update(Value \<Number\>)\<void\>
+## HTMLElement.update(Value[, callback]): void
 
-- Value: **Number**
+- `Value` \<Number\>
+
+- `Callback` \<Function\>
 
 > **Note:** To be used _after_ creating a new gauge.
 
@@ -46,9 +48,11 @@ Example:
 ```javascript
 ```
 
-## HTMLElement.restyle(options \<Object\>)\<void\>
+## HTMLElement.restyle(options[,Callback]): void
 
-- options: **Object**
+- `options` \<Object\>
+
+- `Callback` \<Function\>
 
 > **Note:** To be used _after_ creating a new gauge.
 
@@ -59,11 +63,11 @@ Example:
 ```javascript
 ```
 
-## HTMLElement.destroy(Callback \<Function\>)\<void\>
+## HTMLElement.terminate(Callback): void
 
-- Callback:
+- `Callback`
 
-  - Error: **Exception**
+  - `Error` Object
   
 
 > **Note:** To be used _after_ creating a new gauge.
