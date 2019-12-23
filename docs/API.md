@@ -2,11 +2,11 @@
 
 - [create()](#create)
 
-- [update()](#update)
+- [destroy()](#destroy)
 
 - [restyle()](#restyle)
 
-- [destroy()](#destroy)
+- [update()](#update)
 
 <h2 id="create">create(Container, Value[, Options [,Callback ]]): void</h2>
 
@@ -33,22 +33,22 @@ Example:
 ```javascript
 ```
 
-<h2 id="update">HTMLElement.update(Value[, callback]): void</h2>
+<h2 id="destroy">HTMLElement.destroy(Callback): void</h2>
 
-- `Value` \<Number\>
+- `Callback`
 
-- `Callback` \<Function\>
+  - `Error` Object
 
 > **Note:** To be used _after_ creating a new gauge.
 
-Imperatively update the gauge's value.
+Destroys the gauge's web worker.
 
 Example:
 
 ```javascript
 ```
 
-## HTMLElement.restyle(options[,Callback]): void
+<h2 id="restyle">HTMLElement.restyle(options[,Callback]): void</h2>
 
 - `options` \<Object\>
 
@@ -63,16 +63,15 @@ Example:
 ```javascript
 ```
 
-## HTMLElement.terminate(Callback): void
+<h2 id="update">HTMLElement.update(Value[, callback]): void</h2>
 
-- `Callback`
+- `Value` \<Number\>
 
-  - `Error` Object
-  
+- `Callback` \<Function\>
 
 > **Note:** To be used _after_ creating a new gauge.
 
-Destroys the gauge's web worker.
+Imperatively update the gauge's value.
 
 Example:
 
