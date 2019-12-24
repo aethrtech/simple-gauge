@@ -35,7 +35,8 @@ export default function draw(container:HTMLElement, value = 0, options?:any, cb?
 					container.setAttribute('data-value',ev.data.value)
 					container['data-value'] = ev.data.value
 					//@ts-ignore
-					canvas[event] = ({ target, offsetX, offsetY }) => worker.postMessage({event:event,
+					canvas[event] = ({ target, offsetX, offsetY }) => worker.postMessage({
+						event,
 						type:'update',
 						//@ts-ignore
 						data:{ target:{offsetLeft: target.offsetLeft }, offsetX, offsetY }
@@ -65,6 +66,7 @@ export default function draw(container:HTMLElement, value = 0, options?:any, cb?
 					
 					worker.postMessage({
 						type:'update',
+						ev:'touchmove',
 						data:{
 							//@ts-ignore
 							target:{offsetLeft:target.offsetLeft},

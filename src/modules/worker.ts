@@ -13,7 +13,8 @@ interface State {
     valueCurrent?:number,
     toFixed:number,
     isDrawing:boolean,
-    loop?:any
+    loop?:any,
+    quadrantPrevious?:number
 }
 
 let Canvas, ctx, isSetting, degreesCurrent, 
@@ -55,12 +56,13 @@ onmessage = function(ev){
             if (ev.data.event === 'onmousedown') isSetting = true
             if (ev.data.event === 'onmouseup')  return isSetting = false
             if (ev.data.event === 'onmousemove' && !isSetting) return
-            if (ev.data.event === 'touchmove' && !isSetting) return
-            let degreesNew = action(ev.data.data,Canvas,30)
+            if (ev.data.ev === 'touchmove' && isSetting) return
+            if (ev.data.ev) ev.data.event = ev.data.ev
+            let degreesNew = action(ev.data.event, ev.data.data,Canvas,30)
             if (!degreesNew) return
             if (degreesNew === state.degrees) return
             if (state.isDrawing) return
-            animate(state.degrees,action(ev.data.data,Canvas,state.lineWidth), function(value, angle){
+            animate(state.degrees,action(ev.data.event,ev.data.data,Canvas,state.lineWidth), function(value, angle){
                 state.value = value
                 state.isDrawing = false
                 state.degrees = angle
@@ -128,7 +130,7 @@ onmessage = function(ev){
         angleDiff = Math.abs(angleOld - angleNew),
         count = 0
 
-        if (angleDiff < 2) return cb(state.value,state.degrees)
+        // if (angleDiff < 2) return cb(state.value,state.degrees)
 
         state.loop = setInterval(function(){
             
@@ -146,17 +148,23 @@ onmessage = function(ev){
         },0)
     }
 
-    function action(e, canvas, lineWidth){
-        let r = Math.sqrt((e.offsetX - canvas.width/2)**2 + (e.offsetY - canvas.width/2)**2)
+    function action(event:string,e:any, canvas:HTMLCanvasElement, lineWidth:number){
+        let r:number = Math.sqrt((e.offsetX - canvas.width/2)**2 + (e.offsetY - canvas.width/2)**2)
         if (r > canvas.width/2 - lineWidth + lineWidth/2 || r < canvas.width/2 - lineWidth - lineWidth/2) return
-        let quadrant = e.offsetY > 150 ? 180 : 0
+        let quadrant:number, angle:number
+        if (e.offsetX > 150 && e.offsetY < 150 && state.quadrantPrevious != 360) { quadrant = 90; angle = 90 - Math.abs(Math.asin((e.offsetY - canvas.height/2) / r ) * 180 / Math.PI) }
+        if (e.offsetX > 150 && e.offsetY > 150) { quadrant = 180; angle = 180 - Math.asin((e.offsetX - canvas.width/2) / r ) * 180 / Math.PI }
+        if (e.offsetX < 150 && e.offsetY > 150) { quadrant = 270; angle = 270 - Math.asin((e.offsetY - canvas.width/2) / r ) * 180 / Math.PI }
+        if (e.offsetX < 150 && e.offsetY < 150) { quadrant = 360; angle = 360 + Math.asin((e.offsetX - canvas.width/2) / r ) * 180 / Math.PI }
+        if (e.offsetX >= 150 && e.offsetY < 150 && state.quadrantPrevious == 360 && event.match(/mousemove|touchmove/)) { quadrant = 360; angle = 360 }
+        if (e.offsetX <= 150 && e.offsetY < 150 && state.quadrantPrevious == 90 && event.match(/mousemove|touchmove/)) { quadrant = 90; angle = 0 }
         
-        let angle = (Math.atan((e.offsetX - canvas.width/2) / (e.offsetY - canvas.height/2)) * 180 / Math.PI)
-        if (e.offsetX < 150 && quadrant === 0) { quadrant = 360; angle = Math.abs(angle) }
-        return Math.abs(quadrant - Math.ceil(angle))
+        state.quadrantPrevious = quadrant
+        console.log(state.quadrantPrevious)
+        return angle
     }
 
-    function create(data,cb){
+    function create(data,cb:Function){
         let { canvas  = data,
             color = 'limegreen', 
             bgColor = '#222', 
