@@ -1,6 +1,6 @@
 # Simple Gauge
 
-Beautiful circular gauges rendered off the main thread.
+<p align="center">Beautiful circular gauges rendered off the main thread</p>
 
 ## Contents
 
