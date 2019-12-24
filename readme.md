@@ -1,6 +1,6 @@
 # Simple Gauge
 
-_Abstract_
+Beautiful circular gauges rendered off the main thread.
 
 ## Contents
 
